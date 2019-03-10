@@ -4,7 +4,7 @@
 #include <time.h>
 
 int random(int mn, int mx) {
-	return mn + rand() / (RAND_MAX / (max - min + 1) + 1);
+	return mn + rand() / (RAND_MAX / (mx - mn + 1) + 1);
 }
 
 int main(int argc, char *argv[]) {
@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
 		printf("%d", random(atoi(argv[1]), atoi(argv[2])));
 		break;
 	default:
+		break;
 	}
 	return 0;
 }
