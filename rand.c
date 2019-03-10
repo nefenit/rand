@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 		printf("%d", rand() % (atoi(argv[1]) + 1));
 		break;
 	case 3:
-		printf(%d", random(atoi(argv[1]), atoi(argv[2])));
+		printf("%d", random(atoi(argv[1]), atoi(argv[2])));
 		break;
 	default:
 	}
