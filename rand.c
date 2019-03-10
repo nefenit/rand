@@ -19,10 +19,10 @@ int main(int argc, char *argv[]) {
 	case 1:
 		break;
 	case 2:
-		printf("%d", rand() % (atoi(argv[1]) + 1));
+		printf("%d\n", rand() % (atoi(argv[1]) + 1));
 		break;
 	case 3:
-		printf("%d", random_int(atoi(argv[1]), atoi(argv[2])));
+		printf("%d\n", random_int(atoi(argv[1]), atoi(argv[2])));
 		break;
 	default:
 		break;
