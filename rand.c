@@ -1,3 +1,7 @@
+/* rand - generates random integrer within range using rand()
+ * (c) Copyright 2019 Bartosz Mierzynski
+ * Written in ANSI C (C89)
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
