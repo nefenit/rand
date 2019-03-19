@@ -1,5 +1,8 @@
 # (c) Copyright 2019 Bartosz Mierzynski
-# This makefile abides GNU Coding Standards
+# This makefile abides:
+#  * GNU Coding Standards
+#  * Filesystem Hierarchy Standard (FHS)
+#  * Single UNIX Specification (SUS)
 
 ########################################
 # Table of contents
@@ -42,7 +45,7 @@ SHELL=/bin/sh
 ########################################
 # Portable utilities that can be used without setting variable for them
 # ---------------------------------------------------------------------
-#  awk cat cmp cp diff echo egrep expr false grep install-info ln ls
+#  cat cmp cp diff echo egrep expr false grep install-info ln ls
 #  mkdir mv printf pwd rm rmdir sed sleep sort tar test touch tr true
 #  chgrp chmod chown mknod
 #  --------------------------------------------------------------------
@@ -53,14 +56,15 @@ SHELL=/bin/sh
 
 ########################################
 # Utility programs (those which may need replacement)
+#  INSTALL must be defined in every Makefile
 AR       = ar
 AS       = as
+AWK      = awk
 BISON    = bison
 CC       = cc
 CPP      = $(CC) -E
 CXX      = c++
 FLEX     = flex
-#INSTALL must be defined in every Makefile
 INSTALL  = install
 LD       = ld
 LDCONFIG = ldconfig
@@ -108,52 +112,51 @@ INSTALL_DATA=${INSTALL} -m 644
 
 #########################################
 # Directory variables
-prefix=/usr/local
-exec_prefix=$(prefix)
-bindir=$(exec_prefix)/bin
-sbindir=$(exec_prefix)/sbin
-libexecdir=$(exec_prefix)/libexec
-datarootdir=$(prefix)/share
-datadir=$(datarootdir)
-sysconfdir=$(prefix)/etc
-sharedstatedir=$(prefix)/com
-localstatedir=$(prefix)/var
-runstatedir=$(localstatedir)/run
-includedir=$(prefix)/include
-oldincludedir=/usr/include
-docdir=$(datarootdir)/doc/yourpkg
-infodir=$(datarootdir)/info
-htmldir=$(docdir)
-dvidir=$(docdir)
-pdfdir=$(docdir)
-psdir=$(docdir)
-libdir=$(exec_prefix)/lib
-lispdir=$(datarootdir)/emacs/site-lisp
-localedir=$(datarootdir)/locale
-mandir=$(datarootdir)/man
-man0dir=$(mandir)/man0
-man1dir=$(mandir)/man1
-man2dir=$(mandir)/man2
-man3dir=$(mandir)/man3
-man4dir=$(mandir)/man4
-man5dir=$(mandir)/man5
-man6dir=$(mandir)/man6
-man7dir=$(mandir)/man7
-man8dir=$(mandir)/man8
-man9dir=$(mandir)/man9
-manext=.1
-man0ext=.0
-man1ext=.1
-man2ext=.2
-man3ext=.3
-man4ext=.4
-man5ext=.5
-man6ext=.6
-man7ext=.7
-man8ext=.8
-man9ext=.9
-srcdir=
-
+prefix         = /usr/local
+exec_prefix    = $(prefix)
+bindir         = $(exec_prefix)/bin
+sbindir        = $(exec_prefix)/sbin
+libexecdir     = $(exec_prefix)/libexec
+datarootdir    = $(prefix)/share
+datadir        = $(datarootdir)
+sysconfdir     = $(prefix)/etc
+sharedstatedir = $(prefix)/com
+localstatedir  = $(prefix)/var
+runstatedir    = $(localstatedir)/run
+includedir     = $(prefix)/include
+oldincludedir  = /usr/include
+docdir         = $(datarootdir)/doc/yourpkg
+infodir        = $(datarootdir)/info
+htmldir        = $(docdir)
+dvidir         = $(docdir)
+pdfdir         = $(docdir)
+psdir          = $(docdir)
+libdir         = $(exec_prefix)/lib
+lispdir        = $(datarootdir)/emacs/site-lisp
+localedir      = $(datarootdir)/locale
+mandir         = $(datarootdir)/man
+man0dir        = $(mandir)/man0
+man1dir        = $(mandir)/man1
+man2dir        = $(mandir)/man2
+man3dir        = $(mandir)/man3
+man4dir        = $(mandir)/man4
+man5dir        = $(mandir)/man5
+man6dir        = $(mandir)/man6
+man7dir        = $(mandir)/man7
+man8dir        = $(mandir)/man8
+man9dir        = $(mandir)/man9
+manext         = .1
+man0ext        = .0
+man1ext        = .1
+man2ext        = .2
+man3ext        = .3
+man4ext        = .4
+man5ext        = .5
+man6ext        = .6
+man7ext        = .7
+man8ext        = .8
+man9ext        = .9
+srcdir         =
 
 #######################################
 # 1. Setup targets
