@@ -1,5 +1,5 @@
 # (c) Copyright 2019 Bartosz Mierzynski
-# This makefile abides:
+# This makefile considers:
 #  * GNU Coding Standards
 #  * Filesystem Hierarchy Standard (FHS)
 #  * Single UNIX Specification (SUS)
@@ -164,7 +164,11 @@ srcdir         =
 #######################################
 # 2. Build targets
 
-# Default target (first one) shall be named all
+# - compiles program
+# - default target
+# - doesn't rebuild any documentation
+# - should have -g flag for debugging symbols
+.PHONY: all
 all:
 	@$(CC) rand.c -o rand  $(CFLAGS)
 
@@ -182,6 +186,13 @@ all:
 clean:
 	@rm rand
 
+# - compiles program
+# - copies executables and libraries where they should reside for actual use
+# - may or may not perform simple test
+# - doesn't strip executables
+# - should not modify anything  in directory where target was built
+# - should create all directiories in which files are to be installed (includes prefixes)
+# - the '-' before any command for installing manpage so make will ignore errors
 .PHONY: install
-install:
+install: all
 	$(INSTALL_PROGRAM) rand $(DESTDIR)$(bindir)/rand
