@@ -1,7 +1,30 @@
 # (c) Copyright 2019 Bartosz Mierzynski
 # This makefile abides GNU Coding Standards
 
-# Used to avoid problems with systems where SHELL variable 
+########################################
+# Table of contents
+#  0. Common variables
+#  1. Setup targets
+#  2. Build targets
+#  3. Test targets
+#  4. Documentation targets
+#  5. Clean and install targets
+
+########################################
+# 0. Common variables
+
+# make envirionment variables:
+# COLUMNS
+# HOME
+# LANG
+# LINES
+# LOGNAME
+# PATH
+# PWD
+# SHELL
+# TERM
+
+# Assignement below is used to avoid problems with systems where SHELL variable 
 # is inherited from environment
 SHELL=/bin/sh
 
@@ -11,6 +34,10 @@ SHELL=/bin/sh
 # and have different suffix lists and implicit rules
 .SUFFIX:
 .SUFFIX: .c .o
+
+# If no default goal is specified then the default goal 
+# is the first target from top of file that make encounters
+.DEFAULT_GOAL := all
 
 ########################################
 # Portable utilities that can be used without setting variable for them
@@ -26,41 +53,46 @@ SHELL=/bin/sh
 
 ########################################
 # Utility programs (those which may need replacement)
-AR=ar
-BISON=bison
-CC=cc
-FLEX=flex
+AR       = ar
+AS       = as
+BISON    = bison
+CC       = cc
+CPP      = $(CC) -E
+CXX      = c++
+FLEX     = flex
 #INSTALL must be defined in every Makefile
-INSTALL=install
-LD=ld
-LDCONFIG=ldconfig
-LEX=lex
-MAKE=make
-MAKEINFO=makeinfo
-RANLIB=ranlib
-TEXI2DVI=texi2dvi
-YACC=yacc
+INSTALL  = install
+LD       = ld
+LDCONFIG = ldconfig
+LEX      = lex
+MAKE     = make
+MAKEINFO = makeinfo
+RANLIB   = ranlib
+TEXI2DVI = texi2dvi
+YACC     = yacc
 
 ########################################
 # FLAGS a.k.a command variables of utility programs
 # - general scheme: VARFLAGS
 # - there are exceptions to the scheme
 #BISON
-BISONFLAGS=
+BISONFLAGS =
 #CC 
 # - should be invoked on every CC invocation both those which do compilation or linking
 # - should be placed last in compilation command so user can override the other flags
-CFLAGS=-Wall -pedantic -ansi -O2 -g
+CFLAGS     =-Wall -pedantic -ansi -O2 -g
 #preprocessor
 # - use in any compilation command that runs preprocessor
-CPPFLAGS=
+CPPFLAGS   =
+#CXX - C++ equivalent to CFLAGS
+CXXFLAGS   =
 #LD
 # - use in any compilation command that does linking or directly uses LD
-LDFLAGS=
+LDFLAGS    =
 #LEX
-LFLAGS=
+LFLAGS     =
 #YACC
-YFLAGS=
+YFLAGS     =
 
 ########################################
 # INSTALL_* variables those must be defined in every makefile
@@ -122,16 +154,31 @@ man8ext=.8
 man9ext=.9
 srcdir=
 
-########################################
+
+#######################################
+# 1. Setup targets
+
+#######################################
+# 2. Build targets
+
 # Default target (first one) shall be named all
 all:
 	@$(CC) rand.c -o rand  $(CFLAGS)
 
 #######################################
+#  3. Test targets
+
+#######################################
+#  4. Documentation targets
+
+#######################################
+#  5. Clean and install targets	
 # .PHONY targets - not actual files to make but some procedures
+
 .PHONY: clean
 clean:
 	@rm rand
-.PHONY: install
-	$(INSTALL_PROGRAM) rand $(DESTDIR)$(bindir)/rand
 
+.PHONY: install
+install:
+	$(INSTALL_PROGRAM) rand $(DESTDIR)$(bindir)/rand
