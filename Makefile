@@ -62,39 +62,56 @@ AS       = as
 AWK      = awk
 BISON    = bison
 CC       = cc
+CO       = co
 CPP      = $(CC) -E
 CXX      = c++
+FC       = f77
 FLEX     = flex
+GET      = get
 INSTALL  = install
 LD       = ld
 LDCONFIG = ldconfig
+LINT     = lint
 LEX      = lex
+M2C      = m2c
 MAKE     = make
 MAKEINFO = makeinfo
+PC       = pc
 RANLIB   = ranlib
+TANGLE   = tangle
+CTANGLE  = ctangle
+TEX      = tex
 TEXI2DVI = texi2dvi
+WEAVE    = weave
+CWEAVE   = cweave
 YACC     = yacc
 
 ########################################
 # FLAGS a.k.a command variables of utility programs
 # - general scheme: VARFLAGS
-# - there are exceptions to the scheme
-#BISON
-BISONFLAGS =
+# - there are exceptions to the scheme, mostly compilers
 #CC 
 # - should be invoked on every CC invocation both those which do compilation or linking
 # - should be placed last in compilation command so user can override the other flags
 CFLAGS     =-Wall -pedantic -ansi -O2 -g
-#preprocessor
+#c preprocessor
 # - use in any compilation command that runs preprocessor
 CPPFLAGS   =
 #CXX - C++ equivalent to CFLAGS
 CXXFLAGS   =
+#FC
+FFLAGS     =
+#GET
+GFLAGS     =
 #LD
 # - use in any compilation command that does linking or directly uses LD
 LDFLAGS    =
 #LEX
 LFLAGS     =
+#PC
+PFLAGS     =
+# extra flags for Ratfor programs for Fortran compiler
+RFLAGS     =
 #YACC
 YFLAGS     =
 
@@ -125,6 +142,7 @@ localstatedir  = $(prefix)/var
 runstatedir    = $(localstatedir)/run
 includedir     = $(prefix)/include
 oldincludedir  = /usr/include
+
 docdir         = $(datarootdir)/doc/yourpkg
 infodir        = $(datarootdir)/info
 htmldir        = $(docdir)
