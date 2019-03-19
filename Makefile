@@ -319,7 +319,7 @@ maintainer-clean: distclean
 dist: all
 	@mkdir $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR)
 	@cp rand $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR)
-	@tar -czf $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR) 
+	@tar -czf $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR) $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR) 
 	
 # updates tags table for this program
 .PHONY: TAGS
