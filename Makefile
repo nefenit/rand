@@ -1,35 +1,50 @@
 # (c) Copyright 2019 Bartosz Mierzynski
 # This makefile considers:
-#  * GNU Coding Standards
-#  * Filesystem Hierarchy Standard (FHS)
-#  * Single UNIX Specification (SUS)
+#  - GNU Coding Standards
+#  - Filesystem Hierarchy Standard (FHS)
+#  - Single UNIX Specification (SUS)
 
 ########################################
 # Table of contents
 #  0. Common variables
+#    0. Package variables
+#    1. (make) Environment variables
+#    2. Utility program variables
+#    3. FLAGS variables
+#    4. INSTALL_* variables
+#    5. Directory variables
 #  1. Setup targets
 #  2. Build targets
 #  3. Test targets
 #  4. Documentation targets
-#  5. Clean and install targets
+#  5. Install targets
+#  6. Clean targets
+#  7. Other targets
 
 ########################################
 # 0. Common variables
 
-# make envirionment variables:
-# COLUMNS
-# HOME
-# LANG
-# LINES
-# LOGNAME
-# PATH
-# PWD
-# SHELL
-# TERM
+########################################
+# 0.0 Package variables
+
+PACKAGE_NAME   = rand
+VERSION_MAJOR  = 0
+VERSION_MINOR  = 1
+
+########################################
+# 0.1 Envirionment variables
 
 # Assignement below is used to avoid problems with systems where SHELL variable 
 # is inherited from environment
 SHELL=/bin/sh
+#COLUMNS
+#HOME
+#LANG
+#LINES
+#LOGNAME
+#PATH
+#PWD
+#TERM
 
 # Clears suffixes list and sets new one describing ALL suffixes used in makefile.
 # Those newly defined suffixes are target for makefiles implicit rules
@@ -55,41 +70,43 @@ SHELL=/bin/sh
 # is not standard
 
 ########################################
-# Utility programs (those which may need replacement)
+# 0.2 Utility programs (those which may need replacement)
 #  INSTALL must be defined in every Makefile
-AR       = ar
-AS       = as
-AWK      = awk
-BISON    = bison
-CC       = cc
-CO       = co
-CPP      = $(CC) -E
-CXX      = c++
-FC       = f77
-FLEX     = flex
-GET      = get
-INSTALL  = install
-LD       = ld
-LDCONFIG = ldconfig
-LINT     = lint
-LEX      = lex
-M2C      = m2c
-MAKE     = make
-MAKEINFO = makeinfo
-PC       = pc
-RANLIB   = ranlib
-TANGLE   = tangle
-CTANGLE  = ctangle
-TEX      = tex
-TEXI2DVI = texi2dvi
-WEAVE    = weave
-CWEAVE   = cweave
-YACC     = yacc
+AR        = ar
+AS        = as
+AWK       = awk
+BISON     = bison
+CC        = cc
+CO        = co
+CPP       = $(CC) -E
+CXX       = c++
+FC        = f77
+FLEX      = flex
+GET       = get
+INSTALL   = install
+LD        = ld
+LDCONFIG  = ldconfig
+LINT      = lint
+LEX       = lex
+M2C       = m2c
+MAKE      = make
+MAKEINFO  = makeinfo
+PC        = pc
+RANLIB    = ranlib
+TANGLE    = tangle
+CTANGLE   = ctangle
+TEX       = tex
+TEXI2DVI  = texi2dvi
+TEXI2HTML = makeinfo --no-split --html
+WEAVE     = weave
+CWEAVE    = cweave
+YACC      = yacc
 
 ########################################
-# FLAGS a.k.a command variables of utility programs
+# 0.3 FLAGS a.k.a command variables of utility programs
 # - general scheme: VARFLAGS
 # - there are exceptions to the scheme, mostly compilers
+
 #CC 
 # - should be invoked on every CC invocation both those which do compilation or linking
 # - should be placed last in compilation command so user can override the other flags
@@ -116,7 +133,7 @@ RFLAGS     =
 YFLAGS     =
 
 ########################################
-# INSTALL_* variables those must be defined in every makefile
+# 0.4 INSTALL_* variables those must be defined in every makefile
 # 1. executables
 INSTALL_PROGRAM=$(INSTALL)
 # 2. non-executables (libraries, images, docs, etc.)
@@ -128,7 +145,7 @@ INSTALL_DATA=${INSTALL} -m 644
 # DESTDIR is forbidden to change software operation in any way
 
 #########################################
-# Directory variables
+# 0.5 Directory variables
 prefix         = /usr/local
 exec_prefix    = $(prefix)
 bindir         = $(exec_prefix)/bin
@@ -174,6 +191,7 @@ man6ext        = .6
 man7ext        = .7
 man8ext        = .8
 man9ext        = .9
+
 srcdir         =
 
 #######################################
@@ -193,24 +211,115 @@ all:
 #######################################
 #  3. Test targets
 
+# - performs self test on built program if any
+# - does not perform tests on installed copy but the build
+# - user must build the program before tests
+.PHONY: check
+check:
+
 #######################################
 #  4. Documentation targets
 
+# geneates info files needed
+.PHONY: info
+info:
+
+# - generates documentation in given format
+# - must always exist but may be no-op
+.PHONY: html
+html:
+
+.PHONY: dvi
+dvi:
+
+.PHONY: pdf
+pdf:
+
+.PHONY: ps
+ps:
+
 #######################################
-#  5. Clean and install targets	
-# .PHONY targets - not actual files to make but some procedures
-
-.PHONY: clean
-clean:
-	@rm rand
-
+#  5. Install targets		
+	
 # - compiles program
 # - copies executables and libraries where they should reside for actual use
 # - may or may not perform simple test
 # - doesn't strip executables
-# - should not modify anything  in directory where target was built
+# - should not modify anything in directory where target was built (asumes `make all` was done)
 # - should create all directiories in which files are to be installed (includes prefixes)
 # - the '-' before any command for installing manpage so make will ignore errors
+# - installs info files should be done by $(INSTALL_DATA) and then into $(infodir) and then run install-info program
 .PHONY: install
-install: all
+install: all info
 	$(INSTALL_PROGRAM) rand $(DESTDIR)$(bindir)/rand
+
+# - like install but stripes executables while installing them
+# - doesn't strip scripts; only binaries
+# - doesn't strip executables in build directory; only the copies for installation
+.PHONY: install-strip
+install-strip: all info
+        $(INSTALL_PROGRAM) -s rand $(DESTDIR)$(bindir)/rand
+
+	
+# - deletes installed files that install and install-* create
+# - should not modify directories where compilation is done, only those where files are installed
+.PHONY: uninstall
+uninstall:
+	
+		
+# - intended to be called explicity by the person
+# - installs documentation different than info files
+# - should invoke commands for format targets
+.PHONY: install-html
+install-html: html
+
+.PHONY: install-dvi
+install-dvi: dvi
+
+.PHONY: install-pdf
+install-pdf: pdf
+
+.PHONY: install-ps
+install-ps: ps
+
+
+#######################################
+#  6. Clean targets	
+# .PHONY targets - not actual files to make but some procedures
+
+# - like clean but doesn't delete things you don't want to recompile
+.PHONY: mostlyclean
+mostlyclean:
+	@rm rand
+
+# - deletes ALL(except configuration) files in build directory created by building program includes documentation
+# - doesn't have to delete directiories created by makefile
+.PHONY: clean
+clean: mostlyclean
+	
+# - deletes ALL(including configuration) files created by makefile
+# - doesn't have to delete directiories created by makefile
+.PHONY: distclean
+distclean: clean
+
+
+# - deletes everything that can be rebuilt
+.PHONY: maintainer-clean
+maintainer-clean: distclean
+	@echo 'This command is intended for maintainers to use; it'
+	@echo 'deletes files that may need special tools to rebuild.'
+	
+#######################################
+#  7. Other targets		
+
+# - creates distribution tar for this program compressed with gzip
+# - the filename scheme is: package-versionmajor.versionminor.tar.gz
+# - the tar archive should unpack to subdirectory: package-versionmajor.versionminor
+.PHONY dist
+dist: all
+	@mkdir $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR)
+	@cp rand $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR)
+	@tar -czf $(PACKAGE_NAME)-$(VERSION_MAJOR).$(VERSION_MINOR) 
+	
+# updates tags table for this program
+.PHONY: TAGS
